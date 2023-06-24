@@ -27,7 +27,7 @@ func (b Box) GetRecipientAdress() string {
 }
 
 func (b Box) Send() {
-	fmt.Println("I send box to:", b.GetRecipientAdress(), ",from:", b.GetSenderAdress())
+	fmt.Println("Sending box to:", b.GetRecipientAdress(), "from:", b.GetSenderAdress())
 }
 
 func (e Envelope) GetSenderAdress() string {
@@ -39,12 +39,24 @@ func (e Envelope) GetRecipientAdress() string {
 }
 
 func (e Envelope) Send() {
-	fmt.Println("I send box to:", e.GetRecipientAdress(), ",from:", e.GetSenderAdress())
+	fmt.Println("Sending envelope to:", e.GetRecipientAdress(), "from:", e.GetSenderAdress())
 }
 
-func SendPackage(p Package) {
-	p.Send()
+type SortingDepartment struct{}
 
+func (sd SortingDepartment) SortAndSend(p Package, pack string) {
+	
+	fmt.Scan(&pack)
+	if pack == "Box" || pack == "box" {
+		fmt.Println("Sorting box...")
+		p.Send()
+	}
+	
+	fmt.Scan(&pack)
+	if pack == "Envelope" || pack == "envelope" {
+		fmt.Println("Sorting envelope...")
+		p.Send()
+	}
 }
 
 func main() {
@@ -57,7 +69,10 @@ func main() {
 		AdressSender:    "8 Queen's Road, Birmingham, B1 1RD",
 		AdressRecipient: "45 Windsor Gardens, Edinburgh, EH1 2HU",
 	}
+	var pack string
 
-	SendPackage(b)
-	SendPackage(e)
+	sd := SortingDepartment{}
+	sd.SortAndSend(b, pack)
+	sd.SortAndSend(e, pack)
 }
+
