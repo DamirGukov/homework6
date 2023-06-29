@@ -3,97 +3,87 @@ package main
 import "fmt"
 
 type Package interface {
-	GetSenderAdress() string
-	GetRecipientAdress() string
+	GetSenderAddress() string
+	GetRecipientAddress() string
 	Send()
 }
 
 type Box struct {
-	AdressSender    string
-	AdressRecipient string
+	AddressSender    string
+	AddressRecipient string
 }
 
 type Envelope struct {
-	AdressSender    string
-	AdressRecipient string
+	AddressSender    string
+	AddressRecipient string
 }
 
-func (b Box) GetSenderAdress() string {
-	return b.AdressSender
+func (b Box) GetSenderAddress() string {
+	return b.AddressSender
 }
 
-func (b Box) GetRecipientAdress() string {
-	return b.AdressRecipient
+func (b Box) GetRecipientAddress() string {
+	return b.AddressRecipient
 }
 
 func (b Box) Send() {
-	fmt.Println("Sending box to:", b.GetRecipientAdress(), "from:", b.GetSenderAdress())
+	fmt.Println("Sending box to:", b.GetRecipientAddress(), "from:", b.GetSenderAddress())
 }
 
-func (e Envelope) GetSenderAdress() string {
-	return e.AdressSender
+func (e Envelope) GetSenderAddress() string {
+	return e.AddressSender
 }
 
-func (e Envelope) GetRecipientAdress() string {
-	return e.AdressRecipient
+func (e Envelope) GetRecipientAddress() string {
+	return e.AddressRecipient
 }
 
 func (e Envelope) Send() {
-	fmt.Println("Sending envelope to:", e.GetRecipientAdress(), "from:", e.GetSenderAdress())
+	fmt.Println("Sending envelope to:", e.GetRecipientAddress(), "from:", e.GetSenderAddress())
 }
 
 type SortingDepartment struct{}
 
-func (sd SortingDepartment) SortAndSend(p Package, delivery string, deliverySave map[int]int) {
+func (sd SortingDepartment) SortAndSend(p Package, deliverySave map[int]int) {
 
-	fmt.Println("Fast or regular delivery?")
+	var delivery string
+
+	fmt.Println("Fast or regular delivery for the box?")
 	fmt.Scan(&delivery)
 
 	if delivery == "Fast" || delivery == "fast" {
-		fmt.Println("Sorting box, and sending it by fast deliver")
+		fmt.Println("Sorting box and sending it by fast delivery")
 		deliverySave[1]++
 		p.Send()
-	} else {
-		fmt.Println("Sorting box, and sending it by regular deliver")
+	} else if delivery == "Regular" || delivery == "regular" {
+		fmt.Println("Sorting box and sending it by regular delivery")
 		deliverySave[2]++
 		p.Send()
 	}
 
-	fmt.Println("Fast or regular delivery?")
-	fmt.Scan(&delivery)
-
-	if delivery == "fast" || delivery == "Fast" {
-		fmt.Println("Sorting envelope, and sending it by fast deliver")
-		deliverySave[1]++
-		p.Send()
-	} else {
-		fmt.Println("Sorting box, and sending it by regular deliver")
-		deliverySave[2]++
-		p.Send()
-	}
+	fmt.Println("Fast delivery:", deliverySave[1])
+	fmt.Println("Regular delivery:", deliverySave[2])
 }
 
 func main() {
 	b := Box{
-		AdressSender:    "12 High Street, London, SW1A 1AA",
-		AdressRecipient: "27 Park Avenue, Manchester, M14 5PT",
+		AddressSender:    "12 High Street, London, SW1A 1AA",
+		AddressRecipient: "27 Park Avenue, Manchester, M14 5PT",
 	}
 
 	e := Envelope{
-		AdressSender:    "8 Queen's Road, Birmingham, B1 1RD",
-		AdressRecipient: "45 Windsor Gardens, Edinburgh, EH1 2HU",
+		AddressSender:    "8 Queen's Road, Birmingham, B1 1RD",
+		AddressRecipient: "45 Windsor Gardens, Edinburgh, EH1 2HU",
 	}
-	var delivery string
+
 	deliverySave := map[int]int{
 		1: 0,
 		2: 0,
 	}
-
+	
 	sd := SortingDepartment{}
-	sd.SortAndSend(b, delivery, deliverySave)
-	sd.SortAndSend(e, delivery, deliverySave)
-
-	fmt.Println("Fast delivery: ", deliverySave[1])
-	fmt.Println("Regular delivery: ", deliverySave[2])
+	sd.SortAndSend(b, deliverySave)
+	sd.SortAndSend(e, deliverySave)
 }
+
 
