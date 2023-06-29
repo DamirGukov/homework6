@@ -42,9 +42,16 @@ func (e Envelope) Send() {
 	fmt.Println("Sending envelope to:", e.GetRecipientAddress(), "from:", e.GetSenderAddress())
 }
 
-type SortingDepartment struct{}
+type SortingDepartment struct {
+	deliverySave map[int]int
+}
 
-func (sd SortingDepartment) SortAndSend(p Package, deliverySave map[int]int) {
+func (sd *SortingDepartment) SortAndSend(p Package) {
+
+	sd.deliverySave = map[int]int{
+		1: 0,
+		2: 0,
+	}
 
 	var delivery string
 
@@ -53,16 +60,17 @@ func (sd SortingDepartment) SortAndSend(p Package, deliverySave map[int]int) {
 
 	if delivery == "Fast" || delivery == "fast" {
 		fmt.Println("Sorting box and sending it by fast delivery")
-		deliverySave[1]++
+		sd.deliverySave[1]++
 		p.Send()
 	} else if delivery == "Regular" || delivery == "regular" {
 		fmt.Println("Sorting box and sending it by regular delivery")
-		deliverySave[2]++
+		sd.deliverySave[2]++
 		p.Send()
 	}
 
-	fmt.Println("Fast delivery:", deliverySave[1])
-	fmt.Println("Regular delivery:", deliverySave[2])
+	fmt.Println("Fast delivery:", sd.deliverySave[1])
+	fmt.Println("Regular delivery:", sd.deliverySave[2])
+
 }
 
 func main() {
@@ -76,14 +84,10 @@ func main() {
 		AddressRecipient: "45 Windsor Gardens, Edinburgh, EH1 2HU",
 	}
 
-	deliverySave := map[int]int{
-		1: 0,
-		2: 0,
+	sd := SortingDepartment{
+		deliverySave: make(map[int]int),
 	}
-	
-	sd := SortingDepartment{}
-	sd.SortAndSend(b, deliverySave)
-	sd.SortAndSend(e, deliverySave)
+	sd.SortAndSend(&b)
+	sd.SortAndSend(&e)
 }
-
 
