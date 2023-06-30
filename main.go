@@ -48,11 +48,6 @@ type SortingDepartment struct {
 
 func (sd *SortingDepartment) SortAndSend(p Package) {
 
-	sd.deliverySave = map[int]int{
-		1: 0,
-		2: 0,
-	}
-
 	var delivery string
 
 	fmt.Println("Fast or regular delivery for the box?")
@@ -70,9 +65,7 @@ func (sd *SortingDepartment) SortAndSend(p Package) {
 
 	fmt.Println("Fast delivery:", sd.deliverySave[1])
 	fmt.Println("Regular delivery:", sd.deliverySave[2])
-
 }
-
 func main() {
 	b := Box{
 		AddressSender:    "12 High Street, London, SW1A 1AA",
@@ -87,7 +80,14 @@ func main() {
 	sd := SortingDepartment{
 		deliverySave: make(map[int]int),
 	}
+
+	sd.deliverySave = map[int]int{
+		1: 0,
+		2: 0,
+	}
+
 	sd.SortAndSend(&b)
 	sd.SortAndSend(&e)
 }
+
 
